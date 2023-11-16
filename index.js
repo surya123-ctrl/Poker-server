@@ -7,6 +7,7 @@ const { v1: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
+const e = require('express');
 app.use(cors());
 app.use(express.json());
 app.get('/', (req, res) => {
@@ -39,6 +40,26 @@ app.post('/signup', async (req, res) => {
             expiresIn: 60 * 24
         });
         res.status(201).json({ token, user_id: generatedUserId, email: sanitizedEmail });
+    }
+    catch (error) {
+        console.log(error);
+    }
+})
+
+
+app.post('/login', async (req, res) => {
+    const client = await new MongoClient(uri);
+    const { email, password } = req.body;
+    try {
+        await client.connect();
+        const database = client.db('app-data');
+        const users = database.collection('users');
+        const findUser = await users.findOne({ email });
+        if (findUser && (await bcrypt.compare(password, findUser.hashed_password))) {
+            const token = jwt.sign(findUser, email, { expiresIn: 60 * 24 });
+            res.status(201).json({ token, user_id: findUser.user_id, email: findUser.email });
+        }
+        res.status(400).send('Invalid credentials');
     }
     catch (error) {
         console.log(error);
