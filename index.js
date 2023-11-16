@@ -39,6 +39,7 @@ app.post('/signup', async (req, res) => {
         const token = jwt.sign(insertedUser, sanitizedEmail, {
             expiresIn: 60 * 24
         });
+        // res.status(201).json({ token, user_id: generatedUserId });
         res.status(201).json({ token, user_id: generatedUserId, email: sanitizedEmail });
     }
     catch (error) {
@@ -57,6 +58,7 @@ app.post('/login', async (req, res) => {
         const findUser = await users.findOne({ email });
         if (findUser && (await bcrypt.compare(password, findUser.hashed_password))) {
             const token = jwt.sign(findUser, email, { expiresIn: 60 * 24 });
+            // res.status(201).json({ token, userId: findUser.user_id });
             res.status(201).json({ token, user_id: findUser.user_id, email: findUser.email });
         }
         res.status(400).send('Invalid credentials');
@@ -65,6 +67,53 @@ app.post('/login', async (req, res) => {
         console.log(error);
     }
 })
+
+app.put('/user', async (req, res) => {
+    const client = new MongoClient(uri);
+    const formData = req.body.formData;
+    console.log(formData);
+    try {
+        await client.connect();
+        const database = client.db('app-data');
+        const users = database.collection('users');
+        const query = { user_id: formData.user_id };
+        const updateDocument = {
+            $set: {
+                first_name: formData.first_name,
+                dob_day: formData.dob_day,
+                dob_month: formData.dob_month,
+                dob_year: formData.dob_year,
+                show_gender: formData.show_gender,
+                gender_identity: formData.gender_identity,
+                gender_interest: formData.gender_interest,
+                url: formData.url,
+                about: formData.about,
+                matches: formData.matches
+            }
+        }
+        const insertedUser = await users.updateOne(query, updateDocument);
+        res.send(insertedUser);
+    } finally {
+        await client.close();
+    }
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 app.get('/users', async (req, res) => {
