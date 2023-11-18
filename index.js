@@ -8,10 +8,12 @@ const bcrypt = require('bcrypt')
 
 // const uri = process.env.URI
 // console.log(uri);
-const uri = 'mongodb+srv://suryatomar303:Surya123@cluster0.cujec2y.mongodb.net/?retryWrites=true&w=majority';
-const PORT = process.env.PORT || 8000;
+// const uri = 'mongodb+srv://suryatomar303:Surya123@cluster0.cujec2y.mongodb.net/?retryWrites=true&w=majority';
+// const PORT = process.env.PORT || 8000;
 const app = express()
-app.use(cors())
+app.use(cors({
+    origin: ['https://6557b53a572ab30bf0c80003--tindercopied.netlify.app', 'http://localhost:3000']
+}))
 app.use(express.json())
 
 // Default
