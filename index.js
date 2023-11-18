@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
     res.json('Hello to my app')
 })
 app.post('/signup', async (req, res) => {
-    const client = new MongoClient(uri);
+    const client = new MongoClient(process.env.uri);
     const { email, password } = req.body;
     //creating user by adding hash password and uuid
     const generatedUserId = uuidv4();
@@ -53,7 +53,7 @@ app.post('/signup', async (req, res) => {
 })
 // Log in to the Database
 app.post('/login', async (req, res) => {
-    const client = new MongoClient(uri)
+    const client = new MongoClient(process.env.uri)
     const { email, password } = req.body
 
     try {
@@ -83,7 +83,7 @@ app.post('/login', async (req, res) => {
 
 // Get individual user
 app.get('/user', async (req, res) => {
-    const client = new MongoClient(uri)
+    const client = new MongoClient(process.env.uri)
     const userId = req.query.userId
 
     try {
@@ -102,7 +102,7 @@ app.get('/user', async (req, res) => {
 
 // Update User with a match
 app.put('/addmatch', async (req, res) => {
-    const client = new MongoClient(uri)
+    const client = new MongoClient(process.env.uri)
     const { userId, matchedUserId } = req.body
 
     try {
@@ -123,7 +123,7 @@ app.put('/addmatch', async (req, res) => {
 
 // Get all Users by userIds in the Database
 app.get('/users', async (req, res) => {
-    const client = new MongoClient(uri)
+    const client = new MongoClient(process.env.uri)
     const userIds = JSON.parse(req.query.userIds)
 
     try {
@@ -153,7 +153,7 @@ app.get('/users', async (req, res) => {
 
 // Get all the Gendered Users in the Database
 app.get('/gendered-users', async (req, res) => {
-    const client = new MongoClient(uri)
+    const client = new MongoClient(process.env.uri)
     const gender = req.query.gender
 
     try {
@@ -171,7 +171,7 @@ app.get('/gendered-users', async (req, res) => {
 
 // Update a User in the Database
 app.put('/user', async (req, res) => {
-    const client = new MongoClient(uri)
+    const client = new MongoClient(process.env.uri)
     const formData = req.body.formData
 
     try {
@@ -208,7 +208,7 @@ app.put('/user', async (req, res) => {
 // Get Messages by from_userId and to_userId
 app.get('/messages', async (req, res) => {
     const { userId, correspondingUserId } = req.query
-    const client = new MongoClient(uri)
+    const client = new MongoClient(process.env.uri)
 
     try {
         await client.connect()
@@ -227,7 +227,7 @@ app.get('/messages', async (req, res) => {
 
 // Add a Message to our Database
 app.post('/message', async (req, res) => {
-    const client = new MongoClient(uri)
+    const client = new MongoClient(process.env.uri)
     const message = req.body.message
 
     try {
@@ -243,4 +243,4 @@ app.post('/message', async (req, res) => {
 })
 
 
-app.listen(PORT, () => console.log('server running on PORT ' + PORT))
+app.listen(process.env.PORT, () => console.log('server running on PORT ' + process.env.PORT))
