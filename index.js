@@ -12,7 +12,7 @@ const bcrypt = require('bcrypt')
 // const PORT = process.env.PORT || 8000;
 const app = express()
 app.use(cors({
-    origin: ['https://6557b53a572ab30bf0c80003--tindercopied.netlify.app', 'http://localhost:3000']
+    origin: ['https://tindercopied.netlify.app/', 'http://localhost:3000']
 }))
 app.use(express.json())
 
