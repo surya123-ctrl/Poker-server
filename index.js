@@ -11,10 +11,15 @@ const bcrypt = require('bcrypt')
 // const uri = 'mongodb+srv://suryatomar303:Surya123@cluster0.cujec2y.mongodb.net/?retryWrites=true&w=majority';
 // const PORT = process.env.PORT || 8000;
 const app = express()
-app.use(cors({
-    origin: ['https://tindercopied.netlify.app/', 'http://localhost:3000']
-}))
-app.use(express.json())
+// app.use(cors({
+//     origin: ['https://tindercopied.netlify.app/', 'http://localhost:3000']
+// }))
+// app.use(express.json())
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static('public'));
 
 // Default
 app.get('/', (req, res) => {
